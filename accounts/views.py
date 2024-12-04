@@ -1,4 +1,6 @@
+from datetime import timezone,datetime,timedelta
 import random
+
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -46,10 +48,16 @@ class UserRegisterVerifyCodeView(View):
     def post(self, request):
         user_session = request.session.get('user_registration_info')
         code_instance = OtpCode.objects.get(phone=user_session['phone'])
-        form = self.form_class(request.POST)
+        otp_verification_expire =code_instance.created + timedelta(minutes=2)
+        time_now = datetime.now(timezone.utc)
 
+        form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
+            if time_now > otp_verification_expire:
+                messages.error(request, 'code expired', 'danger')
+                code_instance.delete()
+                return redirect('accounts:verify_code')
             if cd['code'] == code_instance.code:
                 User.objects.create_user(phone_number=user_session['phone'], email=user_session['email'],
                                          password=user_session['password'], full_name=user_session['full_name'])
