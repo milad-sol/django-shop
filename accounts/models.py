@@ -30,9 +30,9 @@ class User(AbstractBaseUser):
 
 
 class OtpCode(models.Model):
-    phone =models.CharField(max_length=11)
-    code =models.PositiveIntegerField()
-    created=models.DateTimeField(auto_now=True)
+    phone = models.CharField(max_length=11)
+    code = models.PositiveIntegerField()
+    created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return '{}-{}-{}'.format(self.phone, self.code, self.created)

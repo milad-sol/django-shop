@@ -1,0 +1,13 @@
+{% extends 'master.html' %}
+{% block title %}
+	Verify Code
+{% endblock %}
+
+{% block content %}
+	<h4>Verify Code</h4>
+    <form action="{% url 'accounts:verify_code' %}" method="post" novalidate class="form-inline">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <input type="submit" value="Verify" class="btn btn-primary">
+    </form>
+{% endblock %}

@@ -40,7 +40,7 @@ class UserChangeForm(forms.ModelForm):
 
 class UserRegistrationForm(forms.Form):
     email = forms.EmailField(label='Email')
-    phone = forms.CharField(max_length=11)
+    phone_number = forms.CharField(max_length=11)
     full_name = forms.CharField(label='full_name')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     confirm_password = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
