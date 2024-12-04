@@ -35,3 +35,24 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'phone_number', 'full_name', 'password', 'last_login']
+
+
+
+class UserRegistrationForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    phone = forms.CharField(max_length=11)
+    full_name = forms.CharField(label='full_name')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+
+
+    def clean_confirm_password(self):
+        password = self.cleaned_data.get('password')
+        confirm_password=self.cleaned_data.get('confirm_password')
+        if password and confirm_password and password != confirm_password:
+            raise ValidationError('Passwords do not match')
+        return confirm_password
+
+
+class VerifyCodeForm(forms.Form):
+    code = forms.IntegerField()
