@@ -45,6 +45,21 @@ class UserRegistrationForm(forms.Form):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     confirm_password = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
+    def clean_email(self):
+       email = self.cleaned_data.get('email')
+       email_is_exist = User.objects.filter(email=email).exists()
+       if email_is_exist:
+           raise ValidationError('Email already exists')
+       return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        phone_is_exist = User.objects.filter(phone_number=phone_number).exists()
+        if phone_is_exist :
+            raise ValidationError('Phone number already exists')
+        return phone_number
+
+
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
@@ -52,6 +67,9 @@ class UserRegistrationForm(forms.Form):
         if password and confirm_password and password != confirm_password:
             raise ValidationError('Passwords do not match')
         return confirm_password
+
+
+
 
 
 class VerifyCodeForm(forms.Form):
