@@ -1,0 +1,61 @@
+{% extends 'master.html' %}
+
+{% block title %}
+	Login in
+{% endblock %}
+
+{% block content %}
+	<h3>Login in website</h3>
+
+          <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#mobile-login" data-bs-toggle="tab">Mobile Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#email-login" data-bs-toggle="tab">Email Login</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body tab-content">
+                        <div class="tab-pane fade show active" id="mobile-login">
+                            <form action="" method="post">
+                                <div class="mb-3">
+
+                                   {% csrf_token %}
+                                    {{ form.as_p }}
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100">Send OTP / Verify</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="email-login">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="remember-me">
+                                    <label class="form-check-label" for="remember-me">Remember me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                                <div class="text-center mt-3">
+                                    <a href="#" class="text-decoration-none small">Forgot Password?</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'master.html' %}
+
+{% block title %}
+	Login With Phone
+{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <form action="{%  url 'accounts:phone_verify' %}" method="post">
+    {% csrf_token %}
+        <p>Please enter the OTP code</p>
+    {{ form.as_p }}
+        <input type="submit" value="send" class="btn btn-primary">
+    </form>
+    </div>
+{% endblock %}

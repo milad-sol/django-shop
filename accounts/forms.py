@@ -37,7 +37,6 @@ class UserChangeForm(forms.ModelForm):
         fields = ['email', 'phone_number', 'full_name', 'password', 'last_login']
 
 
-
 class UserRegistrationForm(forms.Form):
     email = forms.EmailField(label='Email')
     phone_number = forms.CharField(max_length=11)
@@ -46,31 +45,35 @@ class UserRegistrationForm(forms.Form):
     confirm_password = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     def clean_email(self):
-       email = self.cleaned_data.get('email')
-       email_is_exist = User.objects.filter(email=email).exists()
-       if email_is_exist:
-           raise ValidationError('Email already exists')
-       return email
+        email = self.cleaned_data.get('email')
+        email_is_exist = User.objects.filter(email=email).exists()
+        if email_is_exist:
+            raise ValidationError('Email already exists')
+        return email
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         phone_is_exist = User.objects.filter(phone_number=phone_number).exists()
-        if phone_is_exist :
+        if phone_is_exist:
             raise ValidationError('Phone number already exists')
         return phone_number
 
-
-
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
-        confirm_password=self.cleaned_data.get('confirm_password')
+        confirm_password = self.cleaned_data.get('confirm_password')
         if password and confirm_password and password != confirm_password:
             raise ValidationError('Passwords do not match')
         return confirm_password
 
 
-
-
-
 class VerifyCodeForm(forms.Form):
     code = forms.IntegerField()
+
+
+class UserLoginPhoneForm(forms.Form):
+    phone_number = forms.CharField(max_length=11,label='',widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Enter your phone number'}))
+
+class LoginVerifyCodeForm(forms.Form):
+    code = forms.IntegerField(label='',widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your code'}))
+
