@@ -113,12 +113,21 @@ class PhoneVerifyLoginView(View):
         if form.is_valid():
             cd = form.cleaned_data
             if cd['code'] == code_instance.code:
-                user = User.objects.get(phone_number=user_session['phone'])
-                messages.success(request,"you logged in successfully", "success")
-                login(request, user)
-                code_instance.delete()
-                request.session.clear()
-                return render(request,'home/home.html',{"is_active":True})
+                otp_verification_expire = code_instance.created + timedelta(minutes=2)
+                time_now = datetime.now(timezone.utc)
+                if time_now > otp_verification_expire:
+                    messages.error(request, 'code expired', 'danger')
+                    code_instance.delete()
+                    return redirect('accounts:user_login')
+                else:
+                    user = User.objects.get(phone_number=user_session['phone'])
+                    messages.success(request,"you logged in successfully", "success")
+                    login(request, user)
+                    code_instance.delete()
+                    request.session.clear()
+                    return render(request,'home/home.html',{"is_active":True})
+            else:
+                messages.error(request,'this code is invalid', 'danger')
 
 
         return render(request, self.template_name, {'form': form})
