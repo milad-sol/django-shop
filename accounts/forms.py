@@ -71,7 +71,7 @@ class VerifyCodeForm(forms.Form):
 
 
 class UserLoginPhoneForm(forms.Form):
-    phone_number = forms.CharField(max_length=11,label='',widget=forms.TextInput(
+    phone_number = forms.CharField(required=False,max_length=11,label='',widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Enter your phone number'}))
 
 class LoginVerifyCodeForm(forms.Form):

@@ -5,6 +5,7 @@
     <title>{% block title %}
     	
     {% endblock %}</title>
+
 {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
@@ -17,6 +18,9 @@
         background-color: #e9ecef;
             }
 </style>
+{% block extra_header %}
+	
+{% endblock %}
 <body>
 {% include 'includes/navbar.html' %}
 <div class="jumbotron">
