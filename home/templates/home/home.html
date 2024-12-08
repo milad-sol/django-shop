@@ -1,11 +1,21 @@
 {% extends 'master.html' %}
 {% load static %}
 {% block title %}
-	Online Shop
+    Online Shop
 {% endblock %}
 {% block extra_header %}
     <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
 {% endblock %}
 {% block content %}
-	<h2 class="homepage">Online Shop</h2>
+    <h2 class="homepage">Online Shop</h2>
+    {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            <a href="{{ product.get_absolute_url }}">  <img src="{{ product.image.url }}" class="card-img-top"  alt=""/></a>
+            <div class="card-body">
+                <a class="card-title text-center" href="{{ product.get_absolute_url }}" >{{ product.name }}</a>
+
+            </div>
+        </div>
+    {% endfor %}
+
 {% endblock %}
