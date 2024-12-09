@@ -129,7 +129,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
 
-# PARSPACK STORAGE
+# ARVANSTORAGE STORAGE
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = '29226bb1-9b1d-413a-843b-7db180869e16'
