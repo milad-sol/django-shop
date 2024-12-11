@@ -1,34 +1,37 @@
 {% extends 'master.html' %}
 {% block title %}
-	Bucket File
+    Bucket File
 {% endblock %}
 
 
 {% block content %}
-<table class="table table-dark">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Size</th>
-      <th scope="col">Download</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-   {% for object in objects %}
+    <table class="table table-dark">
+        <thead>
         <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ object.Key }}</td>
-      <td>{{ object.Size|filesizeformat }}</td>
-      <td>Download</td>
-      <td><a href="{% url 'home:delete_obj_bucket' object.Key %}">Delete</a></td>
-    </tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Size</th>
+            <th scope="col">Download</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in objects %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ object.Key }}</td>
+                <td>{{ object.Size|filesizeformat }}</td>
+                <td><a href="{% url 'home:download_obj_bucket' object.Key %}">Download</a></td>
+                <td><a href="{% url 'home:delete_obj_bucket' object.Key %}">Delete</a></td>
+            </tr>
 
-   {% endfor %}
+        {% endfor %}
 
 
+        </tbody>
+    </table>
 
-  </tbody>
-</table>
+
 {% endblock %}
+
+

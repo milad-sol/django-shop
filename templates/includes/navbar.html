@@ -27,6 +27,9 @@
                 {% if request.user.is_admin %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'home:bucket' %}">Bucket</a>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'home:upload_obj_bucket' %}">Upload to Bucket</a>
+                    </li>
                     </li>
                 {% endif %}
 

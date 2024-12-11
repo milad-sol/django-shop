@@ -1,0 +1,14 @@
+{% extends 'master.html' %}
+
+{% block title %}
+    Upload file in bucket
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+
+{% endblock %}
