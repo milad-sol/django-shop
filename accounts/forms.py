@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from .models import User
+from .models import User, OtpCode
 
 
 class UserCreationForm(forms.ModelForm):
@@ -56,6 +56,7 @@ class UserRegistrationForm(forms.Form):
         phone_is_exist = User.objects.filter(phone_number=phone_number).exists()
         if phone_is_exist:
             raise ValidationError('Phone number already exists')
+        OtpCode.objects.filter(phone=phone_number).delete()
         return phone_number
 
     def clean_confirm_password(self):
@@ -71,9 +72,15 @@ class VerifyCodeForm(forms.Form):
 
 
 class UserLoginPhoneForm(forms.Form):
-    phone_number = forms.CharField(required=False,max_length=11,label='',widget=forms.TextInput(
+    phone_number = forms.CharField(required=False, max_length=11, label='', widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Enter your phone number'}))
 
-class LoginVerifyCodeForm(forms.Form):
-    code = forms.IntegerField(label='',widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your code'}))
 
+class LoginVerifyCodeForm(forms.Form):
+    code = forms.IntegerField(label='',
+                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your code'}))
+
+
+class UserLoginPhonePasswordForm(forms.Form):
+    phone_number = forms.CharField(required=False, max_length=11, label='', widget=forms.TextInput())
+    password = forms.CharField(label='', widget=forms.PasswordInput())

@@ -1,12 +1,13 @@
 from datetime import timezone, datetime, timedelta
 import random
 from django.contrib.auth import login, logout, authenticate
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import OtpCode, User
 from utils import send_otp_code
-from .forms import UserLoginPhoneForm, VerifyCodeForm, UserRegistrationForm, LoginVerifyCodeForm
+from .forms import UserLoginPhoneForm, VerifyCodeForm, UserRegistrationForm, LoginVerifyCodeForm, \
+    UserLoginPhonePasswordForm
 from django.contrib import messages
 
 
@@ -56,12 +57,10 @@ class UserRegisterVerifyCodeView(View):
             cd = form.cleaned_data
             if time_now > otp_verification_expire:
                 messages.error(request, 'code expired', 'danger')
-                code_instance.delete()
                 return redirect('accounts:verify_code')
             if cd['code'] == code_instance.code:
                 User.objects.create_user(phone_number=user_session['phone'], email=user_session['email'],
                                          password=user_session['password'], full_name=user_session['full_name'])
-                code_instance.delete()
 
                 messages.success(request, f'Login to see your Profile', 'success')
                 return redirect('accounts:user_login')
@@ -84,25 +83,22 @@ class UserLoginView(View):
     def post(self, request):
         form = self.form_class()
         if request.method == 'POST':
-                form = self.form_class(request.POST)
-                random_code = random.randint(1000, 9999)
-                if form.is_valid():
-                    cd = form.cleaned_data
-                    user = User.objects.filter(phone_number=cd['phone_number']).exists()
-                    if user:
-                        send_otp_code(cd['phone_number'], random_code)
-                        OtpCode.objects.create(phone=cd['phone_number'], code=random_code)
-                        messages.success(request, 'we sent you a code', 'success')
-                        request.session['user_login_phone'] = {'phone': cd['phone_number']}
-                        return redirect('accounts:phone_verify')
-                    else:
-                        messages.error(request, 'this phone number is invalid', 'danger')
-                        return redirect('accounts:user_login')
-                return render(request, self.template_name, {'form': form})
+            form = self.form_class(request.POST)
+            random_code = random.randint(1000, 9999)
+            if form.is_valid():
+                cd = form.cleaned_data
+                user = User.objects.filter(phone_number=cd['phone_number']).exists()
+                if user:
+                    send_otp_code(cd['phone_number'], random_code)
+                    OtpCode.objects.create(phone=cd['phone_number'], code=random_code)
+                    messages.success(request, 'we sent you a code', 'success')
+                    request.session['user_login_phone'] = {'phone': cd['phone_number']}
+                    return redirect('accounts:phone_verify')
+                else:
+                    messages.error(request, 'this phone number is invalid', 'danger')
+                    return redirect('accounts:user_login')
+            return render(request, self.template_name, {'form': form})
         return render(request, self.template_name, {'form': form})
-
-
-
 
 
 class PhoneVerifyLoginView(View):
@@ -124,22 +120,42 @@ class PhoneVerifyLoginView(View):
                 time_now = datetime.now(timezone.utc)
                 if time_now > otp_verification_expire:
                     messages.error(request, 'code expired', 'danger')
-                    code_instance.delete()
                     return redirect('accounts:user_login')
                 else:
                     user = User.objects.get(phone_number=user_session['phone'])
                     messages.success(request, "you logged in successfully", "success")
                     login(request, user)
-                    code_instance.delete()
                     request.session.clear()
                     return render(request, 'home/home.html', {"is_active": True})
             else:
                 messages.error(request, 'this code is invalid', 'danger')
-
         return render(request, self.template_name, {'form': form})
 
 
-class UserLogoutView(View):
+class UserLogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
+        messages.success(request, 'you logged out', 'success')
         return redirect('home:home')
+
+
+class UserLoginWithPasswordView(View):
+    form_class = UserLoginPhonePasswordForm
+    template_name = 'accounts/login_with_password.html'
+
+    def get(self, request, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, username=cd['phone_number'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'you logged in successfully', 'success')
+                return redirect('home:home')
+            else:
+                messages.error(request, 'this password is incorrect', 'danger')
+        return render(request, self.template_name, {'form': form})

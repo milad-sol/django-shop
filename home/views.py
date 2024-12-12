@@ -1,9 +1,10 @@
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from utils import  IsAdminUserMixin
 from django.shortcuts import render, redirect
 from django.views import View
-from . import tasks
+
 from product.models import Product
+from . import tasks
 from .forms import BucketUploadForm
 
 
@@ -14,7 +15,8 @@ class HomeView(View):
         return render(request, 'home/home.html', {'products': products})
 
 
-class BucketHome(View):
+
+class BucketHome(IsAdminUserMixin, View):
     template_name = 'home/bucket.html'
 
     def get(self, request, *args, **kwargs):
@@ -22,7 +24,7 @@ class BucketHome(View):
         return render(request, self.template_name, {'objects': objects})
 
 
-class DeleteBucketObj(View):
+class DeleteBucketObj(IsAdminUserMixin, View):
     def get(self, request, key):
         result = tasks.delete_object_task.delay(key
                                                 )
@@ -30,14 +32,14 @@ class DeleteBucketObj(View):
         return redirect("home:bucket")
 
 
-class DownloadBucketObj(View):
+class DownloadBucketObj(IsAdminUserMixin, View):
     def get(self, request, key):
         tasks.download_object_task.delay(key)
         messages.success(request, 'your download will start soon', 'info')
         return redirect("home:bucket")
 
 
-class UploadBucketObj(View):
+class UploadBucketObj(IsAdminUserMixin, View):
     form_class = BucketUploadForm
     template_name = 'home/upload_bucket.html'
 
