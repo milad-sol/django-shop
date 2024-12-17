@@ -1,19 +1,21 @@
 from django.contrib import messages
-from utils import  IsAdminUserMixin
+from utils import IsAdminUserMixin
 from django.shortcuts import render, redirect
 from django.views import View
 
-from product.models import Product
+from product.models import Product, Category
 from . import tasks
 from .forms import BucketUploadForm
 
 
 # Create your views here.
 class HomeView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, slug=None):
         products = Product.objects.filter(available=True)
-        return render(request, 'home/home.html', {'products': products})
-
+        categories = Category.objects.all()
+        if slug:
+            products = products.filter(category__slug=slug)
+        return render(request, 'home/home.html', {'products': products, 'categories': categories})
 
 
 class BucketHome(IsAdminUserMixin, View):

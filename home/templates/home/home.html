@@ -8,11 +8,18 @@
 {% endblock %}
 {% block content %}
     <h2 class="homepage">Online Shop</h2>
+    {% for category in categories %}
+        <a href="{{ category.get_absolute_url }}" class="btn btn-info">{{ category.name }}</a>
+    {% endfor %}
+    <br><br>
+
     {% for product in products %}
-        <div class="card" style="width: 18rem;">
-            <a href="{{ product.get_absolute_url }}"> <img src="{{ product.image.url }}" class="card-img-top"
+        <div class="card" style="display: inline-block;">
+            <a href="{{ product.get_absolute_url }}"> <img src="{{ product.image.url }}"
+                                                           class="card-img-top "
+                                                           style="width: 18rem;"
                                                            alt=""/></a>
-            <div class="card-body">
+            <div class="card-body ">
                 <a class="card-title text-center" href="{{ product.get_absolute_url }}">{{ product.name }}</a>
 
             </div>

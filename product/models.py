@@ -1,10 +1,11 @@
 from django.db import models
 from django.urls import reverse
+
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
-
 
     class Meta:
         ordering = ['name']
@@ -14,8 +15,8 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
-
+    def get_absolute_url(self):
+        return reverse('home:home_category', args=[self.slug, ])
 
 
 class Product(models.Model):
@@ -29,9 +30,9 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-
     class Meta:
         ordering = ['name']
+
     def __str__(self):
         return self.name
 
