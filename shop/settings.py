@@ -36,9 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
+    # Local Apps
     'home.apps.HomeConfig',
     'accounts.apps.AccountsConfig',
     'product.apps.ProductConfig',
+    'orders.apps.OrdersConfig',
+    # Third-party apps
     'storages',
     'django_celery_beat'
 ]
