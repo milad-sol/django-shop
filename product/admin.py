@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import Product,Category
+from .models import Product, Category
 
 admin.site.register(Category)
-admin.site.register(Product)
-# Register your models here.
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    raw_id_fields = ('category',)

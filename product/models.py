@@ -6,6 +6,9 @@ from django.urls import reverse
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
+    sub_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
+                                     related_name='sub_categories')
+    is_sub_category = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['name']
@@ -20,7 +23,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    category = models.ManyToManyField(Category, related_name='products')
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     image = models.ImageField()

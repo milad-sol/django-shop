@@ -12,7 +12,7 @@ from .forms import BucketUploadForm
 class HomeView(View):
     def get(self, request, slug=None):
         products = Product.objects.filter(available=True)
-        categories = Category.objects.all()
+        categories = Category.objects.filter(is_sub_category=False)
         if slug:
             products = products.filter(category__slug=slug)
         return render(request, 'home/home.html', {'products': products, 'categories': categories})

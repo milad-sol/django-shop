@@ -9,7 +9,25 @@
 {% block content %}
     <h2 class="homepage">Online Shop</h2>
     {% for category in categories %}
-        <a href="{{ category.get_absolute_url }}" class="btn btn-info">{{ category.name }}</a>
+
+
+        {% for sub in category.sub_categories.all %}
+            <div class="btn-group">
+                <a href="{{ category.get_absolute_url }}" class="btn btn-danger dropdown-toggle"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+
+                    {{ category.name }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ sub.get_absolute_url }}">{{ sub }}</a></li>
+
+
+                </ul>
+            </div>
+        {% endfor %}
+
+
     {% endfor %}
     <br><br>
 
