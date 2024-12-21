@@ -38,7 +38,10 @@
                     </li>
                 {% endif %}
 
-
+  <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="{% url 'orders:cart' %}">Cart {{ cart |length }}</a>
+                    </li>
             </ul>
         </div>
     </div>
