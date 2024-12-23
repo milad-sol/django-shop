@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .forms import CartAddForm, CouponApplyForm
