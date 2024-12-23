@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     # Third-party apps
     'storages',
-    'django_celery_beat'
+    'django_celery_beat',
+    'ckeditor'
 ]
 
 MIDDLEWARE = [
@@ -148,11 +149,17 @@ AUTH_USER_MODEL = "accounts.User"
 
 # ARVANSTORAGE STORAGE
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = '29226bb1-9b1d-413a-843b-7db180869e16'
-AWS_SECRET_ACCESS_KEY = '9a9ded95cc63289718f3c174c48335d319744942e7da1469a8636e0631e9395a'
+DEFAULT_FILE_STORAGE = '#'
+AWS_ACCESS_KEY_ID = '#'
+AWS_SECRET_ACCESS_KEY = '#'
 AWS_S3_ENDPOINT_URL = "https://s3.ir-thr-at1.arvanstorage.ir"
 AWS_STORAGE_BUCKET_NAME = 'miladfiles'
 AWS_LOCAL_STORAGE = f'{BASE_DIR}/aws/'
 AWS_SERVICE_NAME = 's3'
 AWS_S3_FILE_OVERWRITE = False
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    }
+}

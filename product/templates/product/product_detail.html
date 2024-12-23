@@ -16,7 +16,7 @@
                 <h1 class="display-5">{{ product.name }}</h1>
                 <p class="text-muted">Category: <strong>{{ product.category }}</strong></p>
                 <p class="lead">
-                    {{ product.description }}
+                    {{ product.description |safe}}
                 </p>
                 <h3 class="text-success">{{ product.price }}</h3>
                 <form action="{% url 'orders:add_to_cart' product.id %}" method="post">
